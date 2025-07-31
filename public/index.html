@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Lambda Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1c20 0%, #0d1117 100%);
+            color: #fff;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .header-logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-info {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .main-content {
+            padding-top: 100px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            background: linear-gradient(
+                45deg,
+                #FF9900,
+                #ffac33,
+                #FF9900,
+                #ffac33
+            );
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            animation: shine 5s ease-in-out infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1em;
+            cursor: pointer;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        #result {
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            min-height: 80px;
+            text-align: center;
+            font-size: 1.1em;
+            line-height: 1.6;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        #result::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s;
+        }
+
+        #result.active::before {
+            transform: scaleX(1);
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .header-logo {
+                font-size: 1.2em;
+            }
+
+            .user-info {
+                font-size: 0.8em;
+            }
+
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">MicroService</div>
+        <div class="user-info">
+            <div class="user-icon">S</div>
+            Student
+        </div>
+    </header>
+
+    <div id="root"></div>
+</body>
+</html>
